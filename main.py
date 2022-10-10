@@ -62,37 +62,37 @@ class CallInServer(commands.Bot):
                     + 'the avilable commands are:\n'
                     + '\t`help`\n\t`call`\n\t`uncallable`\n\t`recallalbe`'
                     + '\n\t`uncallables`\n\n'
-                    + 'to get more information about any command, use: `/help` {command}',
+                    + 'to get more information about any command, use: `/help {command}`',
                     ephemeral=True
                 )
             elif command == 'help':
                 await interaction.response.send_message(
-                    'Syntax: /help {command}\n'
+                    'Syntax: `/help {command}`\n'
                     'Action: show a general help message, and a specific message for commands when provided.',
                     ephemeral=True
                 )
             elif command == 'call':
                 await interaction.response.send_message(
-                    'Syntax: /call {mention1} {mention2} {mention3}...\n'
+                    'Syntax: `/call {mention1} {mention2} {mention3}...`\n'
                     + 'Action: simulates a call to users and roles.\n\n'
                     + 'Can only call `callable` roles.',
                     ephemeral=True
                 )
             elif command == 'uncallable':
                 await interaction.response.send_message(
-                    'Syntax: !@!uncallable {role_mention1} {role_mention3} {role_mention2}...\n'
+                    'Syntax: `/uncallable {role_mention1} {role_mention3} {role_mention2}...`\n'
                     + 'Action: makes the mentioned roles uncallable.',
                     ephemeral=True
                 )
             elif command == 'uncallables':
                 await interaction.response.send_message(
-                    'Synatx: !@!uncallables\n'
+                    'Synatx: `/uncallables`\n'
                     + 'Action: sends a list of all uncallables roles in the server.',
                     ephemeral=True
                 )
             elif command == 'recallable':
                 await interaction.response.send_message(
-                    'Syntax: !@!recallable {role_mention1} {role_mention3} {role_mention2}...'
+                    'Syntax: `/recallable {role_mention1} {role_mention3} {role_mention2}...`'
                     + 'Action: makes the mentioned roles callable.',
                     ephemeral=True
                 )
