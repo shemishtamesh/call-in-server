@@ -62,7 +62,7 @@ class CallInServer(commands.Bot):
                     + 'the avilable commands are:\n'
                     + '\t`help`\n\t`call`\n\t`uncallable`\n\t`recallalbe`'
                     + '\n\t`uncallables`\n\n'
-                    + 'to get more information about any command, use: /help {command}',
+                    + 'to get more information about any command, use: `/help` {command}',
                     ephemeral=True
                 )
             elif command == 'help':
@@ -112,7 +112,7 @@ class CallInServer(commands.Bot):
 
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"no user/role was provided. use the /help command of this bot" \
+                    f"no user/role was provided. use the `/help` command of this bot" \
                     + f" for more information about how to use it."
                 )
                 return
@@ -165,7 +165,7 @@ class CallInServer(commands.Bot):
             """
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"no role was provided. use the /help command of this bot" \
+                    f"no role was provided. use the `/help` command of this bot" \
                     + f" for more information about how to use it."
                 )
                 return
@@ -199,10 +199,22 @@ class CallInServer(commands.Bot):
             Syntax: !@!recallable {role_mention1} {role_mention3} {role_mention2}...
             Action: makes the mentioned roles callable.
             """
+            if 'resolved' not in interaction.data.keys():
+                await interaction.response.send_message(
+                    f"no role was provided. use the /help command of this bot" \
+                    + f" for more information about how to use it."
+                )
+                return
+
             if interaction.guild not in self.uncallable_roles:
                 self.uncallable_roles[interaction.guild] = []
 
-            for role in interaction.message.role_mentions:
+            mentioned_roles = []
+            if 'roles' in interaction.data['resolved'].keys():
+                mentioned_roles = [discord.utils.get(interaction.guild.roles, id=int(id))
+                                   for id in interaction.data['resolved']['roles'].keys()]
+
+            for role in mentioned_roles:
                 if role in self.uncallable_roles[interaction.guild]:
                     self.uncallable_roles[interaction.guild].remove(role)
                     await interaction.response.send_message(f"The role `{role}` is now callable.")
