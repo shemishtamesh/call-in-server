@@ -1,0 +1,9 @@
+# fly.toml file generated for call-in-server on 2022-10-09T17:43:25+03:00
+
+app = "call-in-server"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+
