@@ -92,8 +92,13 @@ class CallInServer(commands.Bot):
                 )
             elif command == 'recallable':
                 await interaction.response.send_message(
-                    'Syntax: `/recallable {role_mention1} {role_mention3} {role_mention2}...`'
+                    'Syntax: `/recallable {role_mention1} {role_mention3} {role_mention2}...`\n'
                     + 'Action: makes the mentioned roles callable.',
+                    ephemeral=True
+                )
+            else:
+                await interaction.response.send_message(
+                    'the provided argument is not a valid command',
                     ephemeral=True
                 )
 
@@ -113,7 +118,8 @@ class CallInServer(commands.Bot):
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
                     f"no user/role was provided. use the `/help` command of this bot" \
-                    + f" for more information about how to use it."
+                    + f" for more information about how to use it.",
+                    ephemeral=True
                 )
                 return
 
@@ -166,7 +172,8 @@ class CallInServer(commands.Bot):
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
                     f"no role was provided. use the `/help` command of this bot" \
-                    + f" for more information about how to use it."
+                    + f" for more information about how to use it.",
+                    ephemeral=True
                 )
                 return
 
@@ -180,11 +187,13 @@ class CallInServer(commands.Bot):
                 if role not in self.uncallable_roles[interaction.guild]:
                     self.uncallable_roles[interaction.guild].append(role)
                     await interaction.response.send_message(
-                        f"The role `{role}` is now not callable"
+                        f"The role `{role}` is now not callable",
+                        ephemeral=True
                     )
                 else:
                     await interaction.response.send_message(
-                        f"The role `{role}` is already not callable"
+                        f"The role `{role}` is already not callable",
+                        ephemeral=True
                     )
 
             self.write_uncallable_roles_json()
@@ -202,7 +211,8 @@ class CallInServer(commands.Bot):
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
                     f"no role was provided. use the /help command of this bot" \
-                    + f" for more information about how to use it."
+                    + f" for more information about how to use it.",
+                    ephemeral=True
                 )
                 return
 
@@ -217,9 +227,15 @@ class CallInServer(commands.Bot):
             for role in mentioned_roles:
                 if role in self.uncallable_roles[interaction.guild]:
                     self.uncallable_roles[interaction.guild].remove(role)
-                    await interaction.response.send_message(f"The role `{role}` is now callable.")
+                    await interaction.response.send_message(
+                        f"The role `{role}` is now callable.",
+                        ephemeral=True
+                    )
                 else:
-                    await interaction.response.send_message(f"The role `{role}` is already callable.")
+                    await interaction.response.send_message(
+                        f"The role `{role}` is already callable.",
+                        ephemeral=True
+                    )
 
             self.write_uncallable_roles_json()
 
@@ -236,18 +252,22 @@ class CallInServer(commands.Bot):
                 self.uncallable_roles[interaction.guild] = []
 
             if len(self.uncallable_roles[interaction.guild]) == 0:
-                await interaction.response.send_message("There are no uncallable roles in this server.")
+                await interaction.response.send_message(
+                    "There are no uncallable roles in this server.",
+                    ephemeral=True
+                )
             elif len(self.uncallable_roles[interaction.guild]) == 1:
                 await interaction.response.send_message(
                     "The uncallable role in this server is"
-                    + f" `{self.uncallable_roles[interaction.guild][0]}`."
+                    + f" `{self.uncallable_roles[interaction.guild][0]}`.",
+                    ephemeral=True
                 )
             else:
                 message = "The uncallable roles in this server are: "
                 for role in self.uncallable_roles[interaction.guild]:
                     message += role.mention + ", "
                 message = message[:-2] + "."
-                await interaction.response.send_message(message)
+                await interaction.response.send_message(message, ephemeral=True)
 
     async def send_n_invites(self, interaction, n, users_dm_channels_dict):
         """Returns messages to display about users that couldn't be called"""
