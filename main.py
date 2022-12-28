@@ -40,7 +40,7 @@ class CallInServer(commands.Bot):
         @self.event
         async def on_command_error():
                 await interaction.response.send_message(
-                    'Please use slash commands instead of using the `!@!` prefix.',
+                    'Please use slash commands instead of the `!@!` prefix.',
                     ephemeral=True
                 )
 
@@ -80,7 +80,7 @@ class CallInServer(commands.Bot):
                 )
             elif command == 'uncallable':
                 await interaction.response.send_message(
-                    'Syntax: `/uncallable {role_mention1} {role_mention3} {role_mention2}...`\n'
+                    'Syntax: `/uncallable {role_mention1} {role_mention2} {role_mention3}...`\n'
                     + 'Action: makes the mentioned roles uncallable.',
                     ephemeral=True
                 )
@@ -92,7 +92,7 @@ class CallInServer(commands.Bot):
                 )
             elif command == 'recallable':
                 await interaction.response.send_message(
-                    'Syntax: `/recallable {role_mention1} {role_mention3} {role_mention2}...`\n'
+                    'Syntax: `/recallable {role_mention1} {role_mention2} {role_mention3}...`\n'
                     + 'Action: makes the mentioned roles callable.',
                     ephemeral=True
                 )
@@ -117,7 +117,7 @@ class CallInServer(commands.Bot):
 
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"no user/role was provided. use the `/help` command of this bot" \
+                    f"No user/role was provided. Use the `/help` command of this bot" \
                     + f" for more information about how to use it.",
                     ephemeral=True
                 )
@@ -150,7 +150,7 @@ class CallInServer(commands.Bot):
                     unavailable_users_message += "\n" + message
 
                 await interaction.followup.send(
-                    f"Finishing to call.",
+                    f"Finishing calling.",
                     ephemeral=True
                 )
                 if unavailable_users_message:
@@ -166,12 +166,12 @@ class CallInServer(commands.Bot):
         @commands.has_permissions(administrator=True)
         async def uncallable(interaction: discord.Interaction, *, role: str):
             """
-            Syntax: !@!uncallable {role_mention1} {role_mention3} {role_mention2}...
+            Syntax: !@!uncallable {role_mention1} {role_mention2} {role_mention3}...
             Action: makes the mentioned roles uncallable.
             """
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"no role was provided. use the `/help` command of this bot" \
+                    f"No role was provided. Use the `/help` command of this bot" \
                     + f" for more information about how to use it.",
                     ephemeral=True
                 )
@@ -206,11 +206,11 @@ class CallInServer(commands.Bot):
         async def recallable(interaction: discord.Interaction, *, role: str):
             """
             Syntax: !@!recallable {role_mention1} {role_mention3} {role_mention2}...
-            Action: makes the mentioned roles callable.
+            Action: Makes the mentioned roles callable.
             """
             if 'resolved' not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"no role was provided. use the /help command of this bot" \
+                    f"No role was provided. Use the /help command of this bot" \
                     + f" for more information about how to use it.",
                     ephemeral=True
                 )
@@ -246,7 +246,7 @@ class CallInServer(commands.Bot):
         async def uncallables(interaction: discord.Interaction):
             """
             Synatx: !@!uncallables
-            Action: sends a list of all uncallables roles in the server.
+            Action: Sends a list of all uncallables roles in the server.
             """
             if interaction.guild not in self.uncallable_roles:
                 self.uncallable_roles[interaction.guild] = []
@@ -285,8 +285,8 @@ class CallInServer(commands.Bot):
                         await self.send_dms(interaction, channel)
                     except discord.errors.Forbidden:
                         unavilable_user_messages.append(
-                            f"\t{user.mention} because they blocked this bot."
-                            + f"🚫"
+                            f"\t{user.mention} because they've blocked this bot."
+                            + f" 🚫"
                         )
                         users_not_to_call.append(user)
                 else:
