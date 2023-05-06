@@ -4,7 +4,6 @@ import logging
 from time import sleep
 import itertools
 import discord
-from discord import app_commands
 from discord.ext import commands
 
 
@@ -18,9 +17,10 @@ class CallInServer(commands.Bot):
             activity=discord.Activity(
                 type=discord.ActivityType.listening, name="/help"
             ),
+            help=None
         )
 
-        self.remove_command("help")
+        # self.remove_command("help")
 
         self.add_events()
         self.add_commands()
@@ -38,17 +38,22 @@ class CallInServer(commands.Bot):
                 self.write_uncallable_roles_json()
 
         @self.event
-        async def on_command_error():
-            await interaction.response.send_message(
-                "Please use slash commands instead of the `!@!` prefix.", ephemeral=True
+        async def on_command_error(ctx, exception):
+            await ctx.channel.send(
+                "Please use slash commands instead of the `!@!` prefix.",
             )
 
     def add_commands(self):
+        self.command()
+
+        async def help_old(context):
+            await context.send("Custom help command")
+
         @self.tree.command(
             name="help",
             description="Provides information about how to use this bot.",
         )
-        async def help_(interaction: discord.Interaction, *, command: str = ""):
+        async def help(interaction: discord.Interaction, *, command: str = ""):
             """
             Syntax: /help {command}
             Action: shows this message, and a simular message for other commands when provided.
@@ -367,7 +372,8 @@ class CallInServer(commands.Bot):
     def write_uncallable_roles_json(self):
         jsonable_uncallable_roles = {}
         for guild, role_list in self.uncallable_roles.items():
-            jsonable_uncallable_roles[guild.id] = [role.id for role in role_list]
+            jsonable_uncallable_roles[guild.id] = [
+                role.id for role in role_list]
 
         with open("uncallable_roles.json", "w") as file:
             json.dump(jsonable_uncallable_roles, file)
