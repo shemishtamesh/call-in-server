@@ -20,7 +20,8 @@ class CallInServer(commands.Bot):
             help=None
         )
 
-        # self.remove_command("help")
+        # this is done so that !@!help will be treated as error
+        self.remove_command("help")
 
         self.add_events()
         self.add_commands()
@@ -56,7 +57,8 @@ class CallInServer(commands.Bot):
         async def help(interaction: discord.Interaction, *, command: str = ""):
             """
             Syntax: /help {command}
-            Action: shows this message, and a simular message for other commands when provided.
+            Action: shows this message, and simular messages for
+                other commands when provided.
             """
             if command == "":
                 await interaction.response.send_message(
@@ -66,43 +68,47 @@ class CallInServer(commands.Bot):
                     + "the avilable commands are:\n"
                     + "\t`help`\n\t`call`\n\t`uncallable`\n\t`recallalbe`"
                     + "\n\t`uncallables`\n\n"
-                    + "to get more information about any command, use: `/help {command}`",
+                    + "to get more information about any command,"
+                    + " use: `/help {command}`",
                     ephemeral=True,
                 )
             elif command == "help":
                 await interaction.response.send_message(
                     "Syntax: `/help {command}`\n"
-                    "Action: show a general help message, and a specific message for commands when provided.",
+                    "Action: show a general help message,"
+                    + " and a specific message for commands when provided.",
                     ephemeral=True,
                 )
             elif command == "call":
                 await interaction.response.send_message(
-                    "Syntax: `/call {mention1} {mention2} {mention3}...`\n"
+                    "Syntax: `/call {mention_0}... {mention_n}`\n"
                     + "Action: simulates a call to users and roles.\n\n"
                     + "Can only call `callable` roles.",
                     ephemeral=True,
                 )
             elif command == "uncallable":
                 await interaction.response.send_message(
-                    "Syntax: `/uncallable {role_mention1} {role_mention2} {role_mention3}...`\n"
-                    + "Action: makes the mentioned roles uncallable.",
+                    "Syntax: `/uncallable {role_mention_0}... {role_mention_n}"
+                    + "`\nAction: makes the mentioned roles uncallable.",
                     ephemeral=True,
                 )
             elif command == "uncallables":
                 await interaction.response.send_message(
                     "Synatx: `/uncallables`\n"
-                    + "Action: sends a list of all uncallables roles in the server.",
+                    + "Action: sends a list of all uncallables roles in the"
+                    + " server.",
                     ephemeral=True,
                 )
             elif command == "recallable":
                 await interaction.response.send_message(
-                    "Syntax: `/recallable {role_mention1} {role_mention2} {role_mention3}...`\n"
-                    + "Action: makes the mentioned roles callable.",
+                    "Syntax: `/recallable {role_mention_0}... {role_mention_n}"
+                    + "`\nAction: makes the mentioned roles callable.",
                     ephemeral=True,
                 )
             else:
                 await interaction.response.send_message(
-                    "the provided argument is not a valid command", ephemeral=True
+                    "the provided argument is not a valid command",
+                    ephemeral=True
                 )
 
         @self.tree.command(
@@ -111,7 +117,7 @@ class CallInServer(commands.Bot):
         )
         async def call(interaction: discord.Interaction, *, callables: str):
             """
-            Syntax: /call {mention1} {mention2} {mention3}...
+            Syntax: /call {mention0}... {mention_n}
             Action: simulates a call to users and roles.
 
             Can only call `callable` roles.
@@ -120,8 +126,9 @@ class CallInServer(commands.Bot):
 
             if "resolved" not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"No user/role was provided. Use the `/help` command of this bot"
-                    + f" for more information about how to use it.",
+                    "No user/role was provided."
+                    + "Use the `/help` command of this bot"
+                    + " for more information about how to use it.",
                     ephemeral=True,
                 )
                 return
@@ -151,10 +158,13 @@ class CallInServer(commands.Bot):
                 for message in unavailable_users_messages:
                     unavailable_users_message += "\n" + message
 
-                await interaction.followup.send(f"Finishing calling.", ephemeral=True)
+                await interaction.followup.send(
+                    "Finishing calling.", ephemeral=True
+                )
                 if unavailable_users_message:
                     await interaction.followup.send(
-                        f"Didn't call: {unavailable_users_message}", ephemeral=True
+                        f"Didn't call: {unavailable_users_message}",
+                        ephemeral=True
                     )
 
         @self.tree.command(
@@ -164,13 +174,13 @@ class CallInServer(commands.Bot):
         @commands.has_permissions(administrator=True)
         async def uncallable(interaction: discord.Interaction, *, role: str):
             """
-            Syntax: /uncallable {role_mention1} {role_mention2} {role_mention3}...
+            Syntax: /uncallable {role_mention_0} ... {role_mention_n}
             Action: makes the mentioned roles uncallable.
             """
             if "resolved" not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"No role was provided. Use the `/help` command of this bot"
-                    + f" for more information about how to use it.",
+                    "No role was provided. Use the `/help` command of this bot"
+                    + " for more information about how to use it.",
                     ephemeral=True,
                 )
                 return
@@ -187,11 +197,13 @@ class CallInServer(commands.Bot):
                 if role not in self.uncallable_roles[interaction.guild]:
                     self.uncallable_roles[interaction.guild].append(role)
                     await interaction.response.send_message(
-                        f"The role `{role}` is now not callable", ephemeral=True
+                        f"The role `{role}` is now not callable",
+                        ephemeral=True
                     )
                 else:
                     await interaction.response.send_message(
-                        f"The role `{role}` is already not callable", ephemeral=True
+                        f"The role `{role}` is already not callable",
+                        ephemeral=True
                     )
 
             self.write_uncallable_roles_json()
@@ -203,13 +215,13 @@ class CallInServer(commands.Bot):
         @commands.has_permissions(administrator=True)
         async def recallable(interaction: discord.Interaction, *, role: str):
             """
-            Syntax: /recallable {role_mention1} {role_mention3} {role_mention2}...
+            Syntax: /recallable {role_mention_0} ... {role_mention_n}
             Action: Makes the mentioned roles callable.
             """
             if "resolved" not in interaction.data.keys():
                 await interaction.response.send_message(
-                    f"No role was provided. Use the /help command of this bot"
-                    + f" for more information about how to use it.",
+                    "No role was provided. Use the /help command of this bot"
+                    + " for more information about how to use it.",
                     ephemeral=True,
                 )
                 return
@@ -232,7 +244,8 @@ class CallInServer(commands.Bot):
                     )
                 else:
                     await interaction.response.send_message(
-                        f"The role `{role}` is already callable.", ephemeral=True
+                        f"The role `{role}` is already callable.",
+                        ephemeral=True
                     )
 
             self.write_uncallable_roles_json()
@@ -251,7 +264,8 @@ class CallInServer(commands.Bot):
 
             if len(self.uncallable_roles[interaction.guild]) == 0:
                 await interaction.response.send_message(
-                    "There are no uncallable roles in this server.", ephemeral=True
+                    "There are no uncallable roles in this server.",
+                    ephemeral=True
                 )
             elif len(self.uncallable_roles[interaction.guild]) == 1:
                 await interaction.response.send_message(
@@ -264,7 +278,10 @@ class CallInServer(commands.Bot):
                 for role in self.uncallable_roles[interaction.guild]:
                     message += role.mention + ", "
                 message = message[:-2] + "."
-                await interaction.response.send_message(message, ephemeral=True)
+                await interaction.response.send_message(
+                    message,
+                    ephemeral=True
+                )
 
     async def send_n_invites(self, interaction, n, users_dm_channels_dict):
         """Returns messages to display about users that couldn't be called"""
@@ -282,8 +299,8 @@ class CallInServer(commands.Bot):
                         await self.send_dms(interaction, channel)
                     except discord.errors.Forbidden:
                         unavilable_user_messages.append(
-                            f"\t{user.mention} because they've blocked this bot."
-                            + f" 🚫"
+                            f"\t{user.mention} because they've blocked this"
+                            + " bot. 🚫"
                         )
                         users_not_to_call.append(user)
                 else:
@@ -295,12 +312,12 @@ class CallInServer(commands.Bot):
                     elif user.voice and user.voice.channel == author_vc:
                         unavilable_user_messages.append(
                             f"\t{user.mention} because they are already"
-                            + f" connected. ✅"
+                            + " connected. ✅"
                         )
                     elif self.has_uncallable_role(interaction, user):
                         unavilable_user_messages.append(
                             f"\t{user.mention} because they have an"
-                            + f" uncallable role. 📵"
+                            + " uncallable role. 📵"
                         )
                     users_not_to_call.append(user)
 
